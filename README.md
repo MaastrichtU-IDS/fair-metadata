@@ -1,14 +1,12 @@
-[![Run tests](https://github.com/MaastrichtU-IDS/python-template/workflows/Run%20tests/badge.svg)](https://github.com/MaastrichtU-IDS/python-template/actions?query=workflow%3A%22Run+tests%22)
+[![Run tests](https://github.com/MaastrichtU-IDS/fair-metadata/workflows/Run%20tests/badge.svg)](https://github.com/MaastrichtU-IDS/fair-metadata/actions?query=workflow%3A%22Run+tests%22)
 
-## How to use this template
+## FAIR Metadata generator
 
-* For the directory name, *Dockerfile*, *setup.py* and *test_application.py*, Replace all instances of **my_package** and **fair-metadata** to the package name of your choice using [snake case](https://en.wikipedia.org/wiki/Snake_case) or dash depending on the convention.
-* Leave the headers as is and update the instructions below to the specifics of your tool.
-* Remove this *How to use this template section*
+Python library and CLI to generate FAIR metadata for your dataset.
 
-## My package
+It runs [SPARQL queries](https://github.com/MaastrichtU-IDS/fair-metadata/tree/master/fair_metadata/queries) against the SPARQL endpoint provided by the user to produce [HCLS dataset statistics](https://www.w3.org/TR/hcls-dataset/) for the dataset.
 
-Write a short description of the software here.
+Metadata are returned in the RDF Turtle format.
 
 ## Prerequisites
 
@@ -51,6 +49,7 @@ create_dataset(metadata_object)
 This repository uses [GitHub Actions](/actions) to:
 
 * Automatically run tests at each push to the `main` branch
+  * It uploads the test coverage to SonarCloud, you will need to set the `SONAR_TOKEN` secret
 * Publish the package to [PyPI](https://pypi.org) when a release is created (N.B.: the version of the package needs to be increased in [setup.py](/blob/main/setup.py#L6) before).
 
 > You will need to provide your login credentials using [secrets in the repository settings](/settings/secrets) to publish to [PyPI](https://pypi.org): `PYPI_USERNAME` and `PYPI_PASSWORD`
@@ -72,7 +71,7 @@ pytest
 Run a specific test in a file, and display `print` in the output:
 
 ```bash
-pytest tests/test_application.py::TestApplication::test_return_value -s
+pytest tests/test_fair_metadata.py::test_create_dataset_metadata -s
 ```
 
 ## Docker
