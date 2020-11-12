@@ -134,7 +134,7 @@ def create_dataset(metadata):
     return g
 
 
-def generate_hcls_from_sparql(sparql_endpoint, rdf_distribution_uri, g):
+def generate_hcls_from_sparql(sparql_endpoint, rdf_distribution_uri, g=Graph()):
     """Query the provided SPARQL endpoint to compute HCLS metadata"""
     sparql = SPARQLWrapper(sparql_endpoint)
 

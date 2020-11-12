@@ -17,7 +17,13 @@ Metadata are returned in the RDF Turtle format.
 
 > Provide instructions to install the package
 
-The package can be installed from the source code, see below to run with Docker. Using `-e` means that changes to the source code will be automatically update the package locally.
+Install directly from GitHub to try it:
+
+```bash
+pip install git+https://github.com/MaastrichtU-IDS/fair-metadata.git
+```
+
+Or install from source code for development. Using `-e` means that changes to the source code will be automatically update the package locally.
 
 ```bash
 pip3 install -e .
