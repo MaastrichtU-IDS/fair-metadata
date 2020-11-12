@@ -9,7 +9,7 @@ setup(
     description='Generate metadata for your dataset following the Health Care and Life Science community profile',
     author='Vincent Emonet',
     author_email='vincent.emonet@gmail.com',
-    url='https://github.com/vemonet/fair-metadata',
+    url='https://github.com/MaastrichtU-IDS/fair-metadata',
     packages=find_packages(),
     # package_dir={'': 'src'},
     package_data={'': ['queries/*']},
