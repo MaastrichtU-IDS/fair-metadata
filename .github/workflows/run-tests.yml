@@ -42,6 +42,7 @@ jobs:
         flake8 . --count --exit-zero --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+    # Also add __init__.py in tests folder
     - name: Setup SonarCloud
       uses: warchant/setup-sonar-scanner@v3
 
