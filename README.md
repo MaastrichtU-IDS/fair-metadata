@@ -2,7 +2,7 @@
 
 ## How to use this template
 
-* For the directory name, *Dockerfile*, *setup.py* and *test_application.py*, Replace all instances of **my_package** and **my-package** to the package name of your choice using [snake case](https://en.wikipedia.org/wiki/Snake_case) or dash depending on the convention.
+* For the directory name, *Dockerfile*, *setup.py* and *test_application.py*, Replace all instances of **my_package** and **fair-metadata** to the package name of your choice using [snake case](https://en.wikipedia.org/wiki/Snake_case) or dash depending on the convention.
 * Leave the headers as is and update the instructions below to the specifics of your tool.
 * Remove this *How to use this template section*
 
@@ -29,18 +29,17 @@ pip3 install -e .
 
 > Provide working examples on how to run the package
 
-Run the `my-package` CLI in your terminal:
+Run the `fair-metadata` CLI in your terminal:
 
 ```bash
-my-package hello-world "Python test"
+fair-metadata create -o dataset_metadata.ttl
 ```
 Or in a Python script:
 
 ```python
-from my_package.application import App
+from fair_metadata.generate_metadata import create_dataset
 
-app = App()
-print(app.get_hello_world('Python test'))
+create_dataset(metadata_object)
 ```
 
 ## Test and Publish
@@ -51,8 +50,8 @@ print(app.get_hello_world('Python test'))
 
 This repository uses [GitHub Actions](/actions) to:
 
-* Automatically run tests at each push to the `master` branch
-* Publish the package to [PyPI](https://pypi.org) when a release is created (N.B.: the version of the package needs to be increased in [setup.py](/blob/master/setup.py#L6) before).
+* Automatically run tests at each push to the `main` branch
+* Publish the package to [PyPI](https://pypi.org) when a release is created (N.B.: the version of the package needs to be increased in [setup.py](/blob/main/setup.py#L6) before).
 
 > You will need to provide your login credentials using [secrets in the repository settings](/settings/secrets) to publish to [PyPI](https://pypi.org): `PYPI_USERNAME` and `PYPI_PASSWORD`
 
@@ -81,12 +80,12 @@ pytest tests/test_application.py::TestApplication::test_return_value -s
 Build the image:
 
 ```bash
-docker build -t my-package .
+docker build -t fair-metadata .
 ```
 
 Run a container:
 
 ```bash
-docker run -it --rm my-package hello-world "Python test"
+docker run -it --rm -v $(pwd):/root fair-metadata create -o dataset_metadata.ttl
 ```
 

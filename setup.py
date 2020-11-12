@@ -4,17 +4,19 @@ from setuptools import setup, find_packages
 
 setup(
     version='0.1.0',
-    name='my-package',
+    name='fair-metadata',
     license='MIT License',
-    description='',
-    author='Firstname Lastname',
-    author_email='my.email@protonmail.com',
-    url='',
+    description='Generate metadata for your dataset following the Health Care and Life Science community profile',
+    author='Vincent Emonet',
+    author_email='vincent.emonet@gmail.com',
+    url='https://github.com/vemonet/fair-metadata',
     packages=find_packages(),
+    # package_dir={'': 'src'},
+    package_data={'': ['queries/*']},
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'my-package=my_package.__main__:main',
+            'fair-metadata=fair_metadata.__main__:main',
         ],
     },
 

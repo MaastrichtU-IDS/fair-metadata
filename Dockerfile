@@ -6,5 +6,5 @@ RUN pip install --upgrade pip
 COPY . .
 RUN pip install -e .
 
-ENTRYPOINT [ "my-package" ]
-CMD [ "hello-word Docker" ]
+ENTRYPOINT [ "fair-metadata" ]
+# CMD [ "hello-word Docker" ]
