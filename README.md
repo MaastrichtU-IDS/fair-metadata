@@ -6,7 +6,7 @@ Python library and CLI to generate FAIR metadata for your dataset.
 
 It runs [SPARQL queries](https://github.com/MaastrichtU-IDS/fair-metadata/tree/master/fair_metadata/queries) against the SPARQL endpoint provided by the user to produce [HCLS dataset statistics](https://www.w3.org/TR/hcls-dataset/) for the dataset.
 
-Metadata are returned in the RDF Turtle format.
+> Metadata are produced in the RDF Turtle format.
 
 ## Prerequisites
 
@@ -33,34 +33,52 @@ pip3 install -e .
 
 > Provide working examples on how to run the package
 
-Run the `fair-metadata` CLI in your terminal:
+Check the commands available:
+
+```bash
+fair-metadata
+fair-metadata analyze --help
+```
+
+### Analyze a SPARQL endpoint
+
+Generate descriptive metadata, about types and relations, for a SPARQL endpoint
+
+```bash
+fair-metadata analyze https://graphdb.dumontierlab.com/repositories/test-vincent -o metadata.ttl
+```
+
+### Create dataset metadata description
+
+Create complete metadata description for your dataset, you will be asked a few questions (such as homepage, license and reference for this dataset)
 
 ```bash
 fair-metadata create -o dataset_metadata.ttl
 ```
-Or in a Python script:
+### Run as a Python library
+
+You can also import and use this library in Python:
 
 ```python
-from fair_metadata.generate_metadata import create_dataset
+from fair_metadata.generate_metadata import generate_hcls_from_sparql
 
-create_dataset(metadata_object)
+sparql_endpoint = 'https://graphdb.dumontierlab.com/repositories/test-vincent'
+dataset_uri = 'https://w3id.org/d2s/distribution/default'
+
+g = generate_hcls_from_sparql(sparql_endpoint, dataset_uri)
 ```
 
-## Test and Publish
-
-> Document how to run the tests, and if they are run automatically.
-
-### Continuous Integration
+## Continuous Integration
 
 This repository uses [GitHub Actions](/actions) to:
 
 * Automatically run tests at each push to the `main` branch
-  * It uploads the test coverage to SonarCloud, you will need to set the `SONAR_TOKEN` secret
+  * It uploads the test coverage to SonarCloud (requires to set the `SONAR_TOKEN` secret)
 * Publish the package to [PyPI](https://pypi.org) when a release is created (N.B.: the version of the package needs to be increased in [setup.py](/blob/main/setup.py#L6) before).
 
 > You will need to provide your login credentials using [secrets in the repository settings](/settings/secrets) to publish to [PyPI](https://pypi.org): `PYPI_USERNAME` and `PYPI_PASSWORD`
 
-### Test locally
+## Test locally
 
 Install PyTest:
 
