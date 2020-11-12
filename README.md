@@ -1,4 +1,4 @@
-[![Run tests](https://github.com/MaastrichtU-IDS/fair-metadata/workflows/Run%20tests/badge.svg)](https://github.com/MaastrichtU-IDS/fair-metadata/actions?query=workflow%3A%22Run+tests%22)
+[![Run tests](https://github.com/MaastrichtU-IDS/fair-metadata/workflows/Run%20tests/badge.svg)](https://github.com/MaastrichtU-IDS/fair-metadata/actions?query=workflow%3A%22Run+tests%22) [![Publish package](https://github.com/MaastrichtU-IDS/fair-metadata/workflows/Publish%20package/badge.svg)](https://github.com/MaastrichtU-IDS/fair-metadata/actions?query=workflow%3A%22Publish+package%22) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=MaastrichtU-IDS_fair-metadata&metric=coverage)](https://sonarcloud.io/dashboard?id=MaastrichtU-IDS_fair-metadata) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MaastrichtU-IDS_fair-metadata&metric=alert_status)](https://sonarcloud.io/dashboard?id=MaastrichtU-IDS_fair-metadata)
 
 ## FAIR Metadata generator
 
