@@ -142,6 +142,8 @@ def generate_hcls_from_sparql(sparql_endpoint, rdf_distribution_uri, g=Graph()):
     root = pathlib.Path(__file__).parent.resolve()
     with open(root / '../FAIRMETADATA_FAILED_QUERIES.md', 'w') as f:
         f.write('# Failing HCLS SPARQL queries\n\n\n')
+    with open(root / '../FAIRMETADATA_SUCCESS_QUERIES.md', 'w') as f:
+        f.write('# Generated HCLS metadata\n\n\n')
 
     query_prefixes = """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX dqv: <http://www.w3.org/ns/dqv#>
@@ -184,13 +186,17 @@ PREFIX void-ext: <http://ldf.fi/void-ext#>\n"""
                     sparql.setReturnFormat(TURTLE)
                     # sparql.setReturnFormat(JSONLD)
                     results = sparql.query().convert()
-                    # results = sparql.query().convert().decode('utf-8')
                     # g.parse(data=results, format="turtle")
                     # g.parse(data=results, format="json-ld")
 
                     hcls_graph = Graph()
                     hcls_graph.parse(data=results, format="turtle")
                     g += hcls_graph
+                    with open(root / '../FAIRMETADATA_SUCCESS_QUERIES.md', 'a') as f:
+                        f.write('## Returned RDF \n\n```turtle\n' + results.decode('utf-8') + "\n```\n\n"
+                            + 'Query: \n\n```sparql\n' + complete_query + "\n```\n\n"
+                            + 'In SPARQL endpoint: ' + sparql_endpoint + "\n> " 
+                            + "\n\n---\n")
                 except Exception as e:
                     print('SPARQL query failed:')
                     print(complete_query)
