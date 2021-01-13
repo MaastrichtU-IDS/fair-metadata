@@ -2,11 +2,9 @@
 
 ## FAIR Metadata generator
 
-Python library and CLI to generate FAIR metadata for your dataset.
+This Python library can be used from the commandline, it automatically generates descriptive metadata about a RDF knowledge graph (classes, instances, relations between classes).
 
-It runs [SPARQL queries](https://github.com/MaastrichtU-IDS/fair-metadata/tree/master/fair_metadata/queries) against the SPARQL endpoint provided by the user to produce [HCLS dataset statistics](https://www.w3.org/TR/hcls-dataset/) for the dataset.
-
-> Metadata are produced in the RDF Turtle format.
+We run [SPARQL queries](https://github.com/MaastrichtU-IDS/fair-metadata/tree/master/fair_metadata/queries) against the SPARQL endpoint provided by the user to produce [HCLS dataset statistics](https://www.w3.org/TR/hcls-dataset/) for the dataset in the RDF Turtle format.
 
 ## Prerequisites
 
@@ -20,7 +18,7 @@ It runs [SPARQL queries](https://github.com/MaastrichtU-IDS/fair-metadata/tree/m
 Install directly from GitHub to try it:
 
 ```bash
-pip install git+https://github.com/MaastrichtU-IDS/fair-metadata.git
+pip3 install git+https://github.com/MaastrichtU-IDS/fair-metadata.git
 ```
 
 Or install from source code for development. Using `-e` means that changes to the source code will be automatically update the package locally.

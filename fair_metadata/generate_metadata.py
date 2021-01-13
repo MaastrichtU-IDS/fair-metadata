@@ -3,9 +3,10 @@ import click
 import urllib.parse
 from datetime import date
 import pkg_resources
-from rdflib import Graph, Literal, RDF, URIRef, Namespace
+from rdflib import Graph, plugin, Literal, RDF, URIRef, Namespace
 from rdflib.namespace import RDFS, XSD, DC, DCTERMS, VOID
-from SPARQLWrapper import SPARQLWrapper, TURTLE, POST, JSON
+from rdflib.serializer import Serializer
+from SPARQLWrapper import SPARQLWrapper, TURTLE, POST, JSON, JSONLD
 
 DATASET_NAMESPACE = 'https://w3id.org/d2s/dataset/'
 
@@ -125,7 +126,7 @@ def create_dataset(metadata):
     g.add((version_uri, DCAT['distribution'], source_uri))
     g.add((version_uri, DCAT['distribution'], rdf_uri))
 
-    print(g.serialize(format='turtle'))
+    # print(g.serialize(format='turtle'))
 
     if metadata['sparqlEndpoint']:
         g.add((rdf_uri, DCAT['accessURL'], Literal(metadata['sparqlEndpoint'])))
@@ -145,10 +146,92 @@ def generate_hcls_from_sparql(sparql_endpoint, rdf_distribution_uri, g=Graph()):
             sparql.setQuery(sparql_query)
 
             sparql.setReturnFormat(TURTLE)
+            # sparql.setReturnFormat(JSONLD)
             results = sparql.query().convert()
-            g.parse(data=results, format="turtle")
-            # hcls_graph = Graph()
-            # hcls_graph.parse(data=results, format="turtle")
-            # g.add(hcls_graph)
-            # print(results.serialize(format='ttl'))
+            # g.parse(data=results, format="turtle")
+            # g.parse(data=results, format="json-ld")
+
+            hcls_graph = Graph()
+            hcls_graph.parse(data=results, format="turtle")
+            g += hcls_graph
+
+    # print(g.serialize(format='json-ld', indent=4))
+    # print(g.serialize(format='turtle', indent=4))
     return g
+
+
+# {
+#   "@context": "/contexts/GraphMap",
+#   "@id": "/graph_maps",
+#   "@type": "hydra:Collection",
+#   "hydra:member": [
+#     {
+#       "@id": "/graph_maps/3",
+#       "@type": "http://example.org/GraphMap",
+#       "subjectType": "http://www.w3.org/2000/01/rdf-schema#Resource",
+#       "predicate": "http://semanticscience.org/resource/has-participant",
+#       "objectType": "http://www.w3.org/2000/01/rdf-schema#Resource",
+#       "dataset": "/datasets/3",
+#       "id": 3
+#     },
+#     {
+#       "@id": "/graph_maps/4",
+#       "@type": "http://example.org/GraphMap",
+#       "subjectType": "http://www.w3.org/2000/01/rdf-schema#Resource",
+#       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+#       "objectType": "http://www.ebi.ac.uk/efo/EFO_0001067",
+#       "dataset": "/datasets/3",
+#       "id": 4
+#     }
+#   ],
+#   "hydra:totalItems": 2
+# }
+
+# {
+#   "@context": "/contexts/Dataset",
+#   "@id": "/datasets",
+#   "@type": "hydra:Collection",
+#   "hydra:member": [
+#     {
+#       "@id": "/datasets/3",
+#       "@type": "http://www.w3.org/ns/dcat#Dataset",
+#       "identifier": "mw1",
+#       "title": "Infections",
+#       "description": "A dataset of infections",
+#       "publisher": "http://fairdata.systems",
+#       "license": "http://fairdata.systems/dataset/infections/license",
+#       "publicationDate": "2020-11-12T11:25:00+00:00",
+#       "publisher_name": "Mark Wilkinson",
+#       "graphmaps": [
+#         "/graph_maps/3",
+#         "/graph_maps/4"
+#       ],
+#       "dataservices": [
+#         "/data_services/1"
+#       ],
+#       "id": 3
+#     }
+#   ],
+#   "hydra:totalItems": 1
+# }
+
+# {
+#   "@context": "/contexts/DataService",
+#   "@id": "/data_services",
+#   "@type": "hydra:Collection",
+#   "hydra:member": [
+#     {
+#       "@id": "/data_services/1",
+#       "@type": "http://www.w3.org/ns/dcat#DataService",
+#       "name": "Infections endpoint",
+#       "description": "A SPARQL endpoint with infection data",
+#       "url": "http://fairdata.systems:8990/sparql",
+#       "serviceType": "SPARQL",
+#       "conformsTo": "https://www.w3.org/TR/sparql11-overview/",
+#       "publisher": "http://fairdata.systems",
+#       "dataset": "/datasets/3",
+#       "id": 1
+#     }
+#   ],
+#   "hydra:totalItems": 1
+# }

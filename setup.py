@@ -12,7 +12,7 @@ setup(
     url='https://github.com/MaastrichtU-IDS/fair-metadata',
     packages=find_packages(),
     # package_dir={'': 'src'},
-    package_data={'': ['queries/*']},
+    package_data={'': ['queries/*', 'hcls_queries/*']},
     include_package_data=True,
     entry_points={
         'console_scripts': [

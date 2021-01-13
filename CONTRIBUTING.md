@@ -21,7 +21,7 @@ cd fair-metadata
 git checkout -b my-branch
 ```
 
-3. See how to run the API in development at https://github.com/MaastrichtU-IDS/fair-metadata
+3. See how to run the application in development at https://github.com/MaastrichtU-IDS/fair-metadata
 
 ## Pull Request process
 

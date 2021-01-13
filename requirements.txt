@@ -1,3 +1,4 @@
 click
-rdflib
+rdflib==4.2.2
+rdflib-jsonld
 SPARQLWrapper
