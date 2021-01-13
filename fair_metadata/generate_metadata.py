@@ -195,8 +195,7 @@ PREFIX void-ext: <http://ldf.fi/void-ext#>\n"""
                     with open(root / '../FAIRMETADATA_SUCCESS_QUERIES.md', 'a') as f:
                         f.write('## Returned RDF \n\n```turtle\n' + results.decode('utf-8') + "\n```\n\n"
                             + 'Query: \n\n```sparql\n' + complete_query + "\n```\n\n"
-                            + 'In SPARQL endpoint: ' + sparql_endpoint + "\n> " 
-                            + "\n\n---\n")
+                            + 'In SPARQL endpoint: ' + sparql_endpoint + "\n\n---\n")
                 except Exception as e:
                     print('SPARQL query failed:')
                     print(complete_query)
