@@ -1,5 +1,6 @@
 import os
 import click
+import pathlib
 import urllib.parse
 from datetime import date
 import pkg_resources
@@ -138,6 +139,9 @@ def create_dataset(metadata):
 def generate_hcls_from_sparql(sparql_endpoint, rdf_distribution_uri, g=Graph()):
     """Query the provided SPARQL endpoint to compute HCLS metadata"""
     sparql = SPARQLWrapper(sparql_endpoint)
+    root = pathlib.Path(__file__).parent.resolve()
+    with open(root / '../FAIRMETADATA_FAILED_QUERIES.md', 'w') as f:
+        f.write('# Failing HCLS SPARQL queries\n\n\n')
 
     query_prefixes = """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX dqv: <http://www.w3.org/ns/dqv#>
@@ -147,7 +151,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX dctypes: <http://purl.org/dc/dcmitype/>
 PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX void: <http://rdfs.org/ns/void#>
-PREFIX void-ext: <http://ldf.fi/void-ext#>"""
+PREFIX void-ext: <http://ldf.fi/void-ext#>\n"""
 
     query_select_all_graphs = 'SELECT DISTINCT ?graph WHERE { GRAPH ?graph {?s ?p ?o} }'
     sparql.setQuery(query_select_all_graphs)
@@ -173,19 +177,28 @@ PREFIX void-ext: <http://ldf.fi/void-ext#>"""
                     sparql_query = sparql_query.replace('<?_graph_end>', '')
 
                 complete_query = query_prefixes + sparql_query 
-                print(complete_query)
-                sparql.setQuery(complete_query)
+                # print(complete_query)
 
-                sparql.setReturnFormat(TURTLE)
-                # sparql.setReturnFormat(JSONLD)
-                results = sparql.query().convert()
-                # results = sparql.query().convert().decode('utf-8')
-                # g.parse(data=results, format="turtle")
-                # g.parse(data=results, format="json-ld")
+                try:
+                    sparql.setQuery(complete_query)
+                    sparql.setReturnFormat(TURTLE)
+                    # sparql.setReturnFormat(JSONLD)
+                    results = sparql.query().convert()
+                    # results = sparql.query().convert().decode('utf-8')
+                    # g.parse(data=results, format="turtle")
+                    # g.parse(data=results, format="json-ld")
 
-                hcls_graph = Graph()
-                hcls_graph.parse(data=results, format="turtle")
-                g += hcls_graph
+                    hcls_graph = Graph()
+                    hcls_graph.parse(data=results, format="turtle")
+                    g += hcls_graph
+                except Exception as e:
+                    print('SPARQL query failed:')
+                    print(complete_query)
+                    print(e)
+                    with open(root / '../FAIRMETADATA_FAILED_QUERIES.md', 'a') as f:
+                        f.write('## Query failed \n\n```sparql\n' + complete_query + "\n```\n\n"
+                            + 'In SPARQL endpoint: ' + sparql_endpoint + "\n> " 
+                            + str(e) + "\n\n---\n")
 
     # print(g.serialize(format='json-ld', indent=4))
     # print(g.serialize(format='turtle', indent=4))
