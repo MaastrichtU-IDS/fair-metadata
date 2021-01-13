@@ -1,8 +1,3 @@
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX dctypes: <http://purl.org/dc/dcmitype/>
-PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX void: <http://rdfs.org/ns/void#>
 # 6.6.1.1 To specify the number of triples in the dataset
 CONSTRUCT {
   # GRAPH <?_output> {

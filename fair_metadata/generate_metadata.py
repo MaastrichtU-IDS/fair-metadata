@@ -139,21 +139,53 @@ def generate_hcls_from_sparql(sparql_endpoint, rdf_distribution_uri, g=Graph()):
     """Query the provided SPARQL endpoint to compute HCLS metadata"""
     sparql = SPARQLWrapper(sparql_endpoint)
 
-    for filename in os.listdir(pkg_resources.resource_filename('fair_metadata', 'queries')):
-        with open(pkg_resources.resource_filename('fair_metadata', 'queries/' + filename), 'r') as f:
-            sparql_query = f.read().replace('?_input', rdf_distribution_uri)
-            print(sparql_query)
-            sparql.setQuery(sparql_query)
+    query_prefixes = """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dqv: <http://www.w3.org/ns/dqv#>
+PREFIX hcls: <http://www.w3.org/hcls#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dctypes: <http://purl.org/dc/dcmitype/>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX void: <http://rdfs.org/ns/void#>
+PREFIX void-ext: <http://ldf.fi/void-ext#>"""
 
-            sparql.setReturnFormat(TURTLE)
-            # sparql.setReturnFormat(JSONLD)
-            results = sparql.query().convert()
-            # g.parse(data=results, format="turtle")
-            # g.parse(data=results, format="json-ld")
+    query_select_all_graphs = 'SELECT DISTINCT ?graph WHERE { GRAPH ?graph {?s ?p ?o} }'
+    sparql.setQuery(query_select_all_graphs)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    # print('Get all graphs query Results:')
+    # print(results)
+    select_all_graphs_results = results["results"]["bindings"]
 
-            hcls_graph = Graph()
-            hcls_graph.parse(data=results, format="turtle")
-            g += hcls_graph
+    # Compute HCLS metadata per graph
+    for graph_row in select_all_graphs_results:
+        graph = graph_row['graph']['value']
+        print('Computing HCLS metadata for graph ' + graph)
+        for filename in os.listdir(pkg_resources.resource_filename('fair_metadata', 'queries')):
+            with open(pkg_resources.resource_filename('fair_metadata', 'queries/' + filename), 'r') as f:
+                if (graph):
+                    sparql_query = f.read().replace('?_graph_uri', graph)
+                    sparql_query = sparql_query.replace('<?_graph_start>', 'GRAPH <' + graph + '> {')
+                    sparql_query = sparql_query.replace('<?_graph_end>', '}')
+                else:
+                    sparql_query = f.read().replace('?_graph_uri', rdf_distribution_uri)
+                    sparql_query = sparql_query.replace('<?_graph_start>', '')
+                    sparql_query = sparql_query.replace('<?_graph_end>', '')
+
+                complete_query = query_prefixes + sparql_query 
+                print(complete_query)
+                sparql.setQuery(complete_query)
+
+                sparql.setReturnFormat(TURTLE)
+                # sparql.setReturnFormat(JSONLD)
+                results = sparql.query().convert()
+                # results = sparql.query().convert().decode('utf-8')
+                # g.parse(data=results, format="turtle")
+                # g.parse(data=results, format="json-ld")
+
+                hcls_graph = Graph()
+                hcls_graph.parse(data=results, format="turtle")
+                g += hcls_graph
 
     # print(g.serialize(format='json-ld', indent=4))
     # print(g.serialize(format='turtle', indent=4))
